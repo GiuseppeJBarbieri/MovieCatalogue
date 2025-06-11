@@ -32,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vanillacreamsoda.moviecatalogue.R
@@ -40,7 +39,6 @@ import com.vanillacreamsoda.moviecatalogue.data.model.Movie
 import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 import com.vanillacreamsoda.moviecatalogue.ui.components.MovieListCarousel
 import com.vanillacreamsoda.moviecatalogue.viewModels.HomeViewModel
-import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,7 +56,9 @@ fun HomeView(
         errorMessage,
         movieDetails,
         viewModel::fetchMovieDetails,
-        viewModel::fetchTrendingMovies
+        viewModel::fetchTrendingMovies,
+        viewModel::setMovieId,
+        viewModel::toggleFavorite
     )
 }
 
@@ -70,7 +70,9 @@ fun ParentScaffold(
     errorMessage: String?,
     movieDetails: MovieDetails?,
     fetchMovieDetails: (Long) -> Unit,
-    fetchTrendingMovies: (String) -> Unit
+    fetchTrendingMovies: (String) -> Unit,
+    setMovieId: (Long) -> Unit,
+    toggleFavorite: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val scaffoldNavigator = rememberSupportingPaneScaffoldNavigator()
@@ -92,6 +94,7 @@ fun ParentScaffold(
                 MainPaneContent(
                     onCardClick = { selectedMovieId ->
                         movieId = selectedMovieId
+
                         scope.launch {
                             scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
                         }
@@ -104,7 +107,9 @@ fun ParentScaffold(
                         selectedIndex = newIndex
                     },
                     isLoading,
-                    errorMessage
+                    errorMessage,
+                    toggleFavorite,
+                    setMovieId
                 )
             }
         },
@@ -154,7 +159,9 @@ private fun MainPaneContent(
     options: List<String>,
     onSelectedIndexChange: (Int) -> Unit,
     isLoading: Boolean,
-    errorMessage: String?
+    errorMessage: String?,
+    toggleFavorite: () -> Unit,
+    setMovieId: (Long) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
@@ -197,19 +204,8 @@ private fun MainPaneContent(
                 color = MaterialTheme.colorScheme.error,
             )
         } else {
-            MovieListCarousel(onCardClick, movies)
+            MovieListCarousel(onCardClick, movies, toggleFavorite, setMovieId)
         }
-    }
-}
-
-@Preview(device = "id:pixel_9")
-@Preview(device = "id:pixel_fold")
-@Preview(device = "id:pixel_tablet")
-@Composable
-fun HomeViewPreview(
-) {
-    MovieCatalogueTheme {
-//        ParentScaffold()
     }
 }
 

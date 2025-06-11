@@ -15,7 +15,8 @@
     <!-- Button Labels -->
     <string name="day">Day</string>
     <string name="week">Week</string>
-
+    <string name="delete">Remove</string>
+    <string name="favorites">Favorites</string>
     <!-- Image Alt Text -->
     <string name="rating">Rating:</string>
     <string name="movie_poster">Movie Poster</string>

@@ -17,23 +17,21 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vanillacreamsoda.moviecatalogue.R
 import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
-import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
-
 
 @Composable
 fun DetailsView(movieDetails: MovieDetails?) {
@@ -63,11 +61,15 @@ fun DetailsView(movieDetails: MovieDetails?) {
 
                 var isToggled by rememberSaveable { mutableStateOf(false) }
                 IconButton(
-                    onClick = { isToggled = !isToggled }
+                    onClick = { isToggled = !isToggled },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(16.dp)
                 ) {
                     Icon(
                         imageVector = if (isToggled) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = if (isToggled) stringResource(R.string.favorite) else stringResource(R.string.remove_favorite)
+                        contentDescription = if (isToggled) stringResource(R.string.favorite) else stringResource(R.string.remove_favorite),
+                        tint = Color.Red
                     )
                 }
             }
@@ -93,19 +95,6 @@ fun DetailsView(movieDetails: MovieDetails?) {
             Spacer(modifier = Modifier.height(5.dp))
             Text(movieDetails.revenue.toString())
             Text(stringResource(R.string.director_author))
-        }
-    }
-}
-
-@Preview(device = "id:pixel_9")
-@Preview(device = "id:pixel_fold")
-@Preview(device = "id:pixel_tablet")
-@Composable
-fun DetailsViewPreview(
-) {
-    MovieCatalogueTheme {
-        Surface {
-//            DetailsView()
         }
     }
 }

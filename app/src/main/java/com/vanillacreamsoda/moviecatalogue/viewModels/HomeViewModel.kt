@@ -1,6 +1,7 @@
 package com.vanillacreamsoda.moviecatalogue.viewModels
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,9 +12,11 @@ import com.vanillacreamsoda.moviecatalogue.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +37,8 @@ class HomeViewModel @Inject constructor(
     private val _movieDetails = MutableStateFlow<MovieDetails?>(null)
     val movieDetails: StateFlow<MovieDetails?> = _movieDetails.asStateFlow()
 
+    private var currentMovieId: Long = 0L // Holds the ID of the movie currently displayed
+
     init {
         fetchTrendingMovies()
     }
@@ -52,6 +57,7 @@ class HomeViewModel @Inject constructor(
                 _trendingMovies.value = movies
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to fetch movies: ${e.localizedMessage}"
+                Toast.makeText(context, _errorMessage.value, Toast.LENGTH_LONG).show()
                 _trendingMovies.value = emptyList()
                 e.printStackTrace()
             } finally {
@@ -74,10 +80,42 @@ class HomeViewModel @Inject constructor(
                 _movieDetails.value = movieDetails
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to fetch movies: ${e.localizedMessage}"
+                Toast.makeText(context, _errorMessage.value, Toast.LENGTH_LONG).show()
                 _movieDetails.value = null
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    /**
+     * Tells the ViewModel which movie ID to track from the composable
+     */
+    fun setMovieId(movieId: Long) {
+        currentMovieId = movieId
+    }
+
+    /**
+     *  This Flow observes the favorite status of the current movie ID from the repository
+     */
+    private val isCurrentMovieFavorite: StateFlow<Boolean> =
+        movieRepository.isFavorite(currentMovieId)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = false
+            )
+
+    /**
+     * This function handles adding/removing from favorites via the shared prefs
+     */
+    fun toggleFavorite() {
+        viewModelScope.launch {
+            if (isCurrentMovieFavorite.value) {
+                movieRepository.removeFavorite(currentMovieId)
+            } else {
+                movieRepository.addFavorite(currentMovieId)
             }
         }
     }
