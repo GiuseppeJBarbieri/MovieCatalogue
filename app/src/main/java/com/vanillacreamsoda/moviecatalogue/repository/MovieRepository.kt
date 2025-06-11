@@ -42,14 +42,15 @@ class MovieRepository @Inject constructor(
 
     private val cacheDurationMillis = 60 * 60 * 1000L // 1 hour Cache Time
     private val artificialDelay = 750L
-    private val gson = Gson()
-
-    private val _favoriteMovieIdsFlow: MutableStateFlow<List<Long>> = MutableStateFlow(loadFavoriteMovieIdsFromPrefs())
-    private val favoriteMovieIdsFlow: StateFlow<List<Long>> = _favoriteMovieIdsFlow.asStateFlow()
 
     private val sharedPreferences: SharedPreferences by lazy {
         appContext.getSharedPreferences(movieCachePrefsName, Context.MODE_PRIVATE)
     }
+
+    private val gson = Gson()
+
+    private val _favoriteMovieIdsFlow: MutableStateFlow<List<Long>> = MutableStateFlow(loadFavoriteMovieIdsFromPrefs())
+    private val favoriteMovieIdsFlow: StateFlow<List<Long>> = _favoriteMovieIdsFlow.asStateFlow()
 
     /**
      * Checks to see if movie list is already saved to cache for the selected time window (i.e "day, "week").
