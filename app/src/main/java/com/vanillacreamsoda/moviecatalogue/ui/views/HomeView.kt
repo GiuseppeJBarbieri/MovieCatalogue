@@ -29,21 +29,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.vanillacreamsoda.moviecatalogue.data.model.Movie
+import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 import com.vanillacreamsoda.moviecatalogue.ui.components.MovieListCarousel
 import com.vanillacreamsoda.moviecatalogue.viewModels.HomeViewModel
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 import kotlinx.coroutines.launch
-import kotlin.reflect.KFunction1
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val movies by viewModel.trendingMovies.collectAsState()
+    val movieDetails by viewModel.movieDetails.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
 
-    ParentScaffold(movies, isLoading, errorMessage)
+    ParentScaffold(movies, isLoading, errorMessage, movieDetails, viewModel::fetchMovieDetails)
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
@@ -51,7 +52,9 @@ fun HomeView(
 fun ParentScaffold(
     movies: List<Movie>,
     isLoading: Boolean,
-    errorMessage: String?
+    errorMessage: String?,
+    movieDetails: MovieDetails?,
+    fetchMovieDetails: (Long) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val scaffoldNavigator = rememberSupportingPaneScaffoldNavigator()
@@ -67,7 +70,7 @@ fun ParentScaffold(
                     .padding(20.dp)
             ) {
                 if (isLoading) {
-                    CircularProgressIndicator()
+//                    CircularProgressIndicator()
                 } else if (errorMessage != null) {
                     Text(
                         text = errorMessage,
@@ -81,7 +84,7 @@ fun ParentScaffold(
                                 scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
                             }
                         },
-                        movies = movies,
+                        movies = movies
                     )
                 }
             }
@@ -102,7 +105,17 @@ fun ParentScaffold(
                         }
                     }
             ) {
-                DetailsView(movieId)
+                fetchMovieDetails(movieId)
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else if (errorMessage != null) {
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                } else {
+                    DetailsView(movieDetails)
+                }
             }
         }
     )
@@ -111,7 +124,7 @@ fun ParentScaffold(
 @Composable
 private fun MainPaneContent(
     onCardClick: (Long) -> Unit,
-    movies: List<Movie>,
+    movies: List<Movie>
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),

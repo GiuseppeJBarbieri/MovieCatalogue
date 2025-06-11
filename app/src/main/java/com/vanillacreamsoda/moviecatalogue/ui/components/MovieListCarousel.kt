@@ -60,7 +60,7 @@ fun MovieListCarousel(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500" + movie.posterPath,
+                        model = "https://image.tmdb.org/t/p/w154" + movie.posterPath,
                         contentDescription = "Image from URL",
                         contentScale = ContentScale.FillHeight,
                         modifier = Modifier.fillMaxSize()

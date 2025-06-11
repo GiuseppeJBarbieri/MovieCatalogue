@@ -3,14 +3,14 @@ package com.vanillacreamsoda.moviecatalogue.ui.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -24,38 +24,41 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vanillacreamsoda.moviecatalogue.R
+import coil.compose.AsyncImage
+import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 
 
 @Composable
-fun DetailsView(id: Long) {
+fun DetailsView(movieDetails: MovieDetails?) {
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Text("TMDB Movie")
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
+                .height(500.dp)
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.TopEnd
             ) {
-                var isToggled by rememberSaveable { mutableStateOf(false) }
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w500" + movieDetails?.posterPath,
+                    contentDescription = "Image from URL",
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier.fillMaxSize()
+                )
 
+                var isToggled by rememberSaveable { mutableStateOf(false) }
                 IconButton(
                     onClick = { isToggled = !isToggled }
                 ) {
@@ -68,21 +71,26 @@ fun DetailsView(id: Long) {
         }
         Spacer(modifier = Modifier.height(5.dp))
 
-        Text("Movie Title")
-        Text("Overview")
-        Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do " +
-                    "eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        Text("PG-13")
-        Text("(US)Comedy, Horry, Fantasy")
-        Spacer(modifier = Modifier.height(5.dp))
-        Text("1h 45m")
-        Spacer(modifier = Modifier.height(5.dp))
-        Text("Jeremy Sauinier")
-        Text("Director, Writer")
+        if (movieDetails != null) {
+            Text(movieDetails.title)
+            Text("Overview")
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(movieDetails.overview)
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(movieDetails.releaseDate)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                movieDetails.genres.forEach { it ->
+                    Text(it.name)
+                }
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(movieDetails.runtime.toString())
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(movieDetails.revenue.toString())
+            Text("Director, Writer")
+        }
     }
 }
 
@@ -94,7 +102,7 @@ fun DetailsViewPreview(
 ) {
     MovieCatalogueTheme {
         Surface {
-            DetailsView(0)
+//            DetailsView()
         }
     }
 }

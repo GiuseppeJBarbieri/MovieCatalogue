@@ -1,6 +1,7 @@
 package com.vanillacreamsoda.moviecatalogue.repository
 
 import com.vanillacreamsoda.moviecatalogue.data.model.Movie
+import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 import com.vanillacreamsoda.moviecatalogue.network.TMDBApiService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,5 +15,12 @@ class MovieRepository @Inject constructor(
 
     suspend fun getTrendingMovies(): List<Movie> {
         return tmdbApiService.getTrendingMovies(apiKey = TMDB_API_KEY).results
+    }
+
+    suspend fun getMovieDetails(movieId: Long): MovieDetails {
+        return tmdbApiService.getMovieDetails(
+            apiKey = TMDB_API_KEY,
+            movieId = movieId.toInt()
+        )
     }
 }
