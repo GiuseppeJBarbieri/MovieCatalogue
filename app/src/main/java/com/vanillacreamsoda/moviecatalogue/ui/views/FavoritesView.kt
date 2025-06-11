@@ -69,12 +69,12 @@ fun BuildFavoritesView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(20.dp, 30.dp,20.dp,0.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(stringResource(R.string.tmdb_movie_header))
-            Text(stringResource(R.string.favorites))
+            Text(stringResource(R.string.tmdb_movie_header), style = MaterialTheme.typography.headlineMedium)
+            Text(stringResource(R.string.favorites), style = MaterialTheme.typography.headlineSmall)
 
             favoriteMovies.forEachIndexed { _, movie ->
                 Row(

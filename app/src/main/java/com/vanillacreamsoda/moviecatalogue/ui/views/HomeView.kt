@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -89,7 +91,7 @@ fun ParentScaffold(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(20.dp)
+                    .padding(10.dp, 30.dp, 10.dp, 0.dp)
             ) {
                 MainPaneContent(
                     onCardClick = { selectedMovieId ->
@@ -164,14 +166,20 @@ private fun MainPaneContent(
     setMovieId: (Long) -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(15.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(stringResource(R.string.tmdb_movie_header))
-        Row {
+        Text(
+            stringResource(R.string.tmdb_movie_header),
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+        ){
             Text(
                 modifier = Modifier.weight(1f),
-                text = stringResource(R.string.most_popular)
+                text = stringResource(R.string.most_popular),
+                style = MaterialTheme.typography.headlineSmall
             )
 
             SingleChoiceSegmentedButtonRow {
@@ -191,6 +199,7 @@ private fun MainPaneContent(
                 }
             }
         }
+        HorizontalDivider(modifier = Modifier.fillMaxWidth())
         if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),

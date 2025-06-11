@@ -1,5 +1,6 @@
 package com.vanillacreamsoda.moviecatalogue.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.vanillacreamsoda.moviecatalogue.data.model.Movie
 import coil.compose.AsyncImage
 import com.vanillacreamsoda.moviecatalogue.R
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +58,8 @@ fun MovieListCarousel(
         preferredItemWidth = width,
         itemSpacing = 5.dp,
     ) { i ->
-        Column {
+        Column(
+        ) {
             val movie = movies[i]
             Card(
                 modifier = Modifier
@@ -98,13 +102,16 @@ fun MovieListCarousel(
             }
             Spacer(modifier = Modifier.height(15.dp))
             Text(movie.title)
-            Row {
+            Row(
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Star,
-                    contentDescription = stringResource(R.string.rating)
+                    contentDescription = stringResource(R.string.rating),
+                    tint = Color(0xFFEBB400)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(movie.voteAverage.toString())
+                val formattedRating = String.format(Locale.US, "%.1f", movie.voteAverage)
+                Text(formattedRating)
             }
         }
     }
