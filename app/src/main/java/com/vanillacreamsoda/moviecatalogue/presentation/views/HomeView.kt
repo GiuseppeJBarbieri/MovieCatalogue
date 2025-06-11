@@ -1,0 +1,158 @@
+package com.vanillacreamsoda.moviecatalogue.presentation.views
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.SupportingPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.NavigableSupportingPaneScaffold
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
+import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaffoldNavigator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.vanillacreamsoda.moviecatalogue.presentation.viewModels.HomeViewModel
+import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+@Composable
+fun HomeView(
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    ParentScaffold()
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+fun ParentScaffold() {
+    val scope = rememberCoroutineScope()
+    val scaffoldNavigator = rememberSupportingPaneScaffoldNavigator()
+    var currentPane by rememberSaveable { mutableIntStateOf(0) }
+
+    NavigableSupportingPaneScaffold(
+        navigator = scaffoldNavigator,
+        mainPane = {
+            AnimatedPane(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(20.dp)
+            ) {
+                MainPaneContent(scope, scaffoldNavigator) { selectedPane ->
+                    currentPane = selectedPane // Update the active pane
+                    scope.launch {
+                        scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
+                    }
+                }
+            }
+        },
+        supportingPane = {
+            AnimatedPane(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(20.dp)
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures { change, dragAmount ->
+                            if (dragAmount > 0) { // Swipe right to navigate back
+                                scope.launch {
+                                    scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Main)
+                                }
+                            }
+                        }
+                    }
+            ) {
+                SupportingPaneContent()
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@Composable
+private fun MainPaneContent(
+    scope: CoroutineScope,
+    scaffoldNavigator: ThreePaneScaffoldNavigator<Any>,
+    onCardClick: (Int) -> Unit
+) {
+    Column(
+
+        verticalArrangement = Arrangement.spacedBy(35.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text("IMDB Movie")
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "Most Popular"
+            )
+            OutlinedButton(
+                onClick = { },
+            ) {
+                Text("Today")
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            OutlinedButton(
+                onClick = { },
+            ) {
+                Text("This Week")
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        MovieList()
+    }
+}
+
+@Composable
+private fun MovieList(`
+
+) {
+
+}
+
+@Composable
+private fun MovieItem(
+
+) {
+
+}
+
+
+@Composable
+private fun SupportingPaneContent(
+
+) {
+
+}
+
+@Preview(device = "id:pixel_9")
+@Preview(device = "id:pixel_fold")
+@Preview(device = "id:pixel_tablet")
+@Composable
+fun HomeViewPreview(
+) {
+    MovieCatalogueTheme {
+        ParentScaffold()
+    }
+}
