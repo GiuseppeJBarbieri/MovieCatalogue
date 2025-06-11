@@ -82,6 +82,8 @@ To get a local copy up and running, follow these simple steps.
 * **Favorites:** Show correct favorite icon if movie has already beed favorited on the home view
 * **Error Handling:** Ran out of time for some of the extra UI for Error handling on the favorites screen.
 * **ROOM IMPL:** Implement ROOM for local database saves instead of using shared preferences.
+* **Cacheing:** Add caching for favorite movie list details.
+* **Pagination:** Add pagination support for home page carousel.
 
 ---
 
