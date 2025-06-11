@@ -144,7 +144,7 @@ fun ParentScaffold(
                         color = MaterialTheme.colorScheme.error,
                     )
                 } else {
-                    DetailsView(movieDetails)
+                    DetailsView(movieDetails, setMovieId, toggleFavorite)
                 }
             }
         }

@@ -37,7 +37,7 @@ import com.vanillacreamsoda.moviecatalogue.R
 import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 
 @Composable
-fun DetailsView(movieDetails: MovieDetails?) {
+fun DetailsView(movieDetails: MovieDetails?, setMovieId: (Long) -> Unit, toggleFavorite: () -> Unit) {
     val posterUrl = "https://image.tmdb.org/t/p/w500"
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -64,7 +64,12 @@ fun DetailsView(movieDetails: MovieDetails?) {
 
                 var isToggled by rememberSaveable { mutableStateOf(false) }
                 IconButton(
-                    onClick = { isToggled = !isToggled },
+                    onClick = {
+                        if (movieDetails != null) {
+                            setMovieId(movieDetails.id)
+                        }
+                        isToggled = !isToggled
+                        toggleFavorite() },
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(16.dp)
