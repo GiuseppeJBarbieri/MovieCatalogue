@@ -5,11 +5,9 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -17,11 +15,11 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.SupportingPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.NavigableSupportingPaneScaffold
-import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberSupportingPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -30,25 +28,34 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.vanillacreamsoda.moviecatalogue.data.model.Movie
 import com.vanillacreamsoda.moviecatalogue.ui.components.MovieListCarousel
 import com.vanillacreamsoda.moviecatalogue.viewModels.HomeViewModel
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.reflect.KFunction1
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    ParentScaffold()
+    val movies by viewModel.trendingMovies.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    ParentScaffold(movies, isLoading, errorMessage)
 }
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun ParentScaffold() {
+fun ParentScaffold(
+    movies: List<Movie>,
+    isLoading: Boolean,
+    errorMessage: String?
+) {
     val scope = rememberCoroutineScope()
     val scaffoldNavigator = rememberSupportingPaneScaffoldNavigator()
-    var currentPane by rememberSaveable { mutableIntStateOf(0) }
+    var movieId by rememberSaveable { mutableLongStateOf(0) }
 
     NavigableSupportingPaneScaffold(
         navigator = scaffoldNavigator,
@@ -59,11 +66,23 @@ fun ParentScaffold() {
                     .background(MaterialTheme.colorScheme.surface)
                     .padding(20.dp)
             ) {
-                MainPaneContent { selectedPane ->
-                    currentPane = selectedPane // Update the active pane
-                    scope.launch {
-                        scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
-                    }
+                if (isLoading) {
+                    CircularProgressIndicator()
+                } else if (errorMessage != null) {
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                } else {
+                    MainPaneContent(
+                        onCardClick = { selectedMovieId ->
+                            movieId = selectedMovieId
+                            scope.launch {
+                                scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
+                            }
+                        },
+                        movies = movies,
+                    )
                 }
             }
         },
@@ -83,16 +102,16 @@ fun ParentScaffold() {
                         }
                     }
             ) {
-                DetailsView(currentPane)
+                DetailsView(movieId)
             }
         }
     )
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 private fun MainPaneContent(
-    onCardClick: (Int) -> Unit
+    onCardClick: (Long) -> Unit,
+    movies: List<Movie>,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
@@ -115,7 +134,7 @@ private fun MainPaneContent(
                 Text("This Week")
             }
         }
-        MovieListCarousel(onCardClick)
+        MovieListCarousel(onCardClick, movies)
     }
 }
 
@@ -126,7 +145,9 @@ private fun MainPaneContent(
 fun HomeViewPreview(
 ) {
     MovieCatalogueTheme {
-        ParentScaffold()
+//        ParentScaffold(
+//
+//        )
     }
 }
 

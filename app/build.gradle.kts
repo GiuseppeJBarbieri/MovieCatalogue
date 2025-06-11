@@ -62,11 +62,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     kapt(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation(libs.okhttp)
-
+    implementation(libs.okhttp) // HTTP client
+    implementation(libs.logging.interceptor) // For logging network requests
+    implementation(libs.retrofit) // turns http api into kotlin interface
+    implementation(libs.converter.gson) // JSON to Kotlin Object
+    implementation(libs.retrofit2.kotlin.coroutines.adapter) // Coroutine adapter for Retrofit (to use suspend functions)
+    implementation(libs.coil.compose) // Coil for AsyncImage
 }

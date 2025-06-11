@@ -37,7 +37,7 @@ import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 
 
 @Composable
-fun DetailsView(i: Int) {
+fun DetailsView(id: Long) {
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = Modifier
