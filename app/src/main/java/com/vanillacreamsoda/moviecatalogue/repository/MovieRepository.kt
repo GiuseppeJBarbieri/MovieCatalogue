@@ -12,6 +12,7 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.core.content.edit
+import com.vanillacreamsoda.moviecatalogue.BuildConfig
 
 @Singleton
 class MovieRepository @Inject constructor(
@@ -20,7 +21,7 @@ class MovieRepository @Inject constructor(
 
 ) {
     // TODO - Move to buildConfigField
-    private val TMDB_API_KEY = "-"
+    private val _tmdbAPIKey = BuildConfig.TMDB_API_KEY
 
     /**
      * Shared Preferences

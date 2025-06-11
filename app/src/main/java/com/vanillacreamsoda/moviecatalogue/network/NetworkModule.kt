@@ -1,5 +1,6 @@
 package com.vanillacreamsoda.moviecatalogue.network
 
+import com.vanillacreamsoda.moviecatalogue.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,7 +31,7 @@ object NetworkModule {
     fun provideAuthInterceptor(): Interceptor {
         return Interceptor { chain ->
             val request = chain.request().newBuilder()
-                .header("Authorization", "--")
+                .header("Authorization", BuildConfig.TMDB_AUTH_TOKEN)
                 .build()
             chain.proceed(request)
         }

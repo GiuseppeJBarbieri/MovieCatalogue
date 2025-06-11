@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,6 +21,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // --- Read properties from local.properties ---
+        val properties = Properties()
+        if (rootProject.file("local.properties").exists()) {
+            rootProject.file("local.properties").inputStream().use { inputStream ->
+                properties.load(inputStream)
+            }
+        }
+
+        // --- Expose them to BuildConfig ---
+        buildConfigField("String", "TMDB_API_KEY", "\"${properties.getProperty("tmdb.api.key")}\"")
+        buildConfigField("String", "TMDB_AUTH_TOKEN", "\"${properties.getProperty("tmdb.auth.token")}\"")
     }
 
     buildTypes {
@@ -39,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
