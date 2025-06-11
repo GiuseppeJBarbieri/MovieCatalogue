@@ -66,7 +66,7 @@ To get a local copy up and running, follow these simple steps.
 
 ---
 
-## 📸 Screenshots (Optional)
+## 📸 Screenshots
 ![Home](https://github.com/user-attachments/assets/8c51e221-8746-42c0-94cb-dcd059f83e2c)
 ![Favorites](https://github.com/user-attachments/assets/f0916cbc-8528-466a-b39f-82d38de6fb23)
 ![Details](https://github.com/user-attachments/assets/46cfc208-34d2-4f0c-8587-c44c86f1485e)
