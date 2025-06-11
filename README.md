@@ -80,7 +80,8 @@ To get a local copy up and running, follow these simple steps.
 * **More Movie Categories:** Explore different movie lists (e.g., popular, top-rated).
 * **Testing:** Add unit and UI tests.
 * **Favorites:** Show correct favorite icon if movie has already beed favorited on the home view
-* **Error Handling:** Error handling is lacking the UI alerts for when there's no internet (i.e Favorites Screen)
+* **Error Handling:** Ran out of time for some of the extra UI for Error handling on the favorites screen.
+* **ROOM IMPL:** Implement ROOM for local database saves instead of using shared preferences.
 
 ---
 
