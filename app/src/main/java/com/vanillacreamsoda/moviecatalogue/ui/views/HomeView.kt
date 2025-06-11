@@ -1,4 +1,4 @@
-package com.vanillacreamsoda.moviecatalogue.presentation.views
+package com.vanillacreamsoda.moviecatalogue.ui.views
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -30,7 +30,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.vanillacreamsoda.moviecatalogue.presentation.viewModels.HomeViewModel
+import com.vanillacreamsoda.moviecatalogue.ui.components.MovieListCarousel
+import com.vanillacreamsoda.moviecatalogue.viewModels.HomeViewModel
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ fun ParentScaffold() {
                     .background(MaterialTheme.colorScheme.surface)
                     .padding(20.dp)
             ) {
-                MainPaneContent(scope, scaffoldNavigator) { selectedPane ->
+                MainPaneContent { selectedPane ->
                     currentPane = selectedPane // Update the active pane
                     scope.launch {
                         scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
@@ -74,7 +75,7 @@ fun ParentScaffold() {
                     .padding(20.dp)
                     .pointerInput(Unit) {
                         detectHorizontalDragGestures { change, dragAmount ->
-                            if (dragAmount > 0) { // Swipe right to navigate back
+                            if (dragAmount > 50) { // Swipe right to navigate back
                                 scope.launch {
                                     scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Main)
                                 }
@@ -82,7 +83,7 @@ fun ParentScaffold() {
                         }
                     }
             ) {
-                SupportingPaneContent()
+                DetailsView(currentPane)
             }
         }
     )
@@ -91,17 +92,13 @@ fun ParentScaffold() {
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 private fun MainPaneContent(
-    scope: CoroutineScope,
-    scaffoldNavigator: ThreePaneScaffoldNavigator<Any>,
     onCardClick: (Int) -> Unit
 ) {
     Column(
-
-        verticalArrangement = Arrangement.spacedBy(35.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        Text("IMDB Movie")
-        Spacer(modifier = Modifier.height(16.dp))
+        Text("TMDB Movie")
         Row {
             Text(
                 modifier = Modifier.weight(1f),
@@ -112,38 +109,14 @@ private fun MainPaneContent(
             ) {
                 Text("Today")
             }
-            Spacer(modifier = Modifier.width(10.dp))
             OutlinedButton(
                 onClick = { },
             ) {
                 Text("This Week")
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        MovieList()
+        MovieListCarousel(onCardClick)
     }
-}
-
-@Composable
-private fun MovieList(`
-
-) {
-
-}
-
-@Composable
-private fun MovieItem(
-
-) {
-
-}
-
-
-@Composable
-private fun SupportingPaneContent(
-
-) {
-
 }
 
 @Preview(device = "id:pixel_9")
@@ -156,3 +129,4 @@ fun HomeViewPreview(
         ParentScaffold()
     }
 }
+

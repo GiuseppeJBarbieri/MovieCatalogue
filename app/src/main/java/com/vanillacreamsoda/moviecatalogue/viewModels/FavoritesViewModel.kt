@@ -1,4 +1,4 @@
-package com.vanillacreamsoda.moviecatalogue.presentation.viewModels
+package com.vanillacreamsoda.moviecatalogue.viewModels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.vanillacreamsoda.moviecatalogue.presentation.components.navigation
+package com.vanillacreamsoda.moviecatalogue.ui.components.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon

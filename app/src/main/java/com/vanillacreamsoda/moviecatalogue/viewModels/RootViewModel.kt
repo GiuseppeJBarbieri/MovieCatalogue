@@ -1,4 +1,4 @@
-package com.vanillacreamsoda.moviecatalogue.presentation.viewModels
+package com.vanillacreamsoda.moviecatalogue.viewModels
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
