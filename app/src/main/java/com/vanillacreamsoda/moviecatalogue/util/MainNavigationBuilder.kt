@@ -5,11 +5,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.vanillacreamsoda.moviecatalogue.R
 import kotlinx.serialization.Serializable
@@ -21,8 +19,11 @@ sealed class MainNavigationBuilder {
      */
     @Serializable data object Home : MainNavigationBuilder()
     @Serializable data object Favorites : MainNavigationBuilder()
-    @Serializable data object Details : MainNavigationBuilder()
+    @Serializable data object Settings : MainNavigationBuilder()
 
+    /**
+     * Enum used to build navigation bar items
+     */
     enum class MainDestinations(
         @StringRes val label: Int,
         val iconFilled: ImageVector,
@@ -49,7 +50,7 @@ sealed class MainNavigationBuilder {
             Icons.Filled.Settings,
             Icons.Outlined.Settings,
             R.string.settings_title,
-            Details,
+            Settings,
         ),
     }
 }

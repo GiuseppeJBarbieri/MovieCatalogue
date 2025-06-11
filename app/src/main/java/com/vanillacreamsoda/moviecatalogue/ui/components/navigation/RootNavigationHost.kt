@@ -25,9 +25,6 @@ fun RootNavigationHost(
                 hiltViewModel<HomeViewModel>()
             )
         }
-//        composable<MainNavigationBuilder.Details> {
-//            DetailsView(hiltViewModel<HomeViewModel>())
-//        }
 
         composable<MainNavigationBuilder.Favorites> {
             FavoritesView(hiltViewModel<FavoritesViewModel>())

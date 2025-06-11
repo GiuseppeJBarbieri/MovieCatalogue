@@ -26,15 +26,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.vanillacreamsoda.moviecatalogue.R
 import com.vanillacreamsoda.moviecatalogue.data.model.MovieDetails
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 
 
 @Composable
 fun DetailsView(movieDetails: MovieDetails?) {
+    val posterUrl = "https://image.tmdb.org/t/p/w500"
     Column(
         verticalArrangement = Arrangement.spacedBy(5.dp),
         modifier = Modifier
@@ -42,7 +45,7 @@ fun DetailsView(movieDetails: MovieDetails?) {
             .padding(10.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Text("TMDB Movie")
+        Text(stringResource(R.string.tmdb_movie_header))
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,8 +55,8 @@ fun DetailsView(movieDetails: MovieDetails?) {
                 modifier = Modifier.fillMaxSize(),
             ) {
                 AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w500" + movieDetails?.posterPath,
-                    contentDescription = "Image from URL",
+                    model = posterUrl + movieDetails?.posterPath,
+                    contentDescription = stringResource(R.string.movie_poster),
                     contentScale = ContentScale.FillHeight,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -64,7 +67,7 @@ fun DetailsView(movieDetails: MovieDetails?) {
                 ) {
                     Icon(
                         imageVector = if (isToggled) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = if (isToggled) "Selected icon button" else "Unselected icon button."
+                        contentDescription = if (isToggled) stringResource(R.string.favorite) else stringResource(R.string.remove_favorite)
                     )
                 }
             }
@@ -73,7 +76,7 @@ fun DetailsView(movieDetails: MovieDetails?) {
 
         if (movieDetails != null) {
             Text(movieDetails.title)
-            Text("Overview")
+            Text(stringResource(R.string.overview))
             Spacer(modifier = Modifier.height(5.dp))
             Text(movieDetails.overview)
             Spacer(modifier = Modifier.height(5.dp))
@@ -89,7 +92,7 @@ fun DetailsView(movieDetails: MovieDetails?) {
             Text(movieDetails.runtime.toString())
             Spacer(modifier = Modifier.height(5.dp))
             Text(movieDetails.revenue.toString())
-            Text("Director, Writer")
+            Text(stringResource(R.string.director_author))
         }
     }
 }

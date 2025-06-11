@@ -7,10 +7,11 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface TMDBApiService {
-    @GET("trending/movie/day")
+    @GET("trending/movie/{time_window}")
     suspend fun getTrendingMovies(
+        @Path("time_window") timeWindow: String,
         @Query("language") language: String = "en-US",
-        @Query("api_key") apiKey: String
+        @Query("api_key") apiKey: String,
     ): MovieResponse
 
      @GET("movie/{movie_id}")

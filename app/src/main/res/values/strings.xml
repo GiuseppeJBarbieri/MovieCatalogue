@@ -6,8 +6,20 @@
     <string name="details_title">Details</string>
     <string name="settings_title">Settings</string>
 
+
+    <!-- Text Labels -->
+    <string name="tmdb_movie_header">TMDB Movie</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="overview">Overview</string>
+    <string name="director_author">Director, Writer</string>
     <!-- Button Labels -->
+    <string name="day">Day</string>
+    <string name="week">Week</string>
 
-
+    <!-- Image Alt Text -->
+    <string name="rating">Rating:</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="favorite">Favorite</string>
+    <string name="remove_favorite">Remove Favorite</string>
 
 </resources>

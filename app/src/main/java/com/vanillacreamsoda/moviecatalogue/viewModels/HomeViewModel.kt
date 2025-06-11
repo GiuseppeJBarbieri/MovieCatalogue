@@ -38,13 +38,17 @@ class HomeViewModel @Inject constructor(
         fetchTrendingMovies()
     }
 
-    private fun fetchTrendingMovies() {
+    /**
+     * Fetch trending movie list from TMDB API
+     * @param timeWindow - time frame for most trending (day,week)
+     */
+    fun fetchTrendingMovies(timeWindow: String = "day") {
         _isLoading.value = true
         _errorMessage.value = null
 
         viewModelScope.launch {
             try {
-                val movies = movieRepository.getTrendingMovies()
+                val movies = movieRepository.getTrendingMovies(timeWindow)
                 _trendingMovies.value = movies
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to fetch movies: ${e.localizedMessage}"
@@ -56,6 +60,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Fetch Movie Details based on movieID
+     * @param movieId - ID of Movie
+     */
     fun fetchMovieDetails(movieId: Long) {
         _isLoading.value = true
         _errorMessage.value = null

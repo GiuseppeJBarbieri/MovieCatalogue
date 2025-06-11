@@ -2,7 +2,6 @@ package com.vanillacreamsoda.moviecatalogue.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,11 +21,13 @@ import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vanillacreamsoda.moviecatalogue.data.model.Movie
 import com.vanillacreamsoda.moviecatalogue.ui.theme.MovieCatalogueTheme
 import coil.compose.AsyncImage
+import com.vanillacreamsoda.moviecatalogue.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,14 +37,14 @@ fun MovieListCarousel(
 ) {
     val height = 400.dp
     val width = 250.dp
+    val posterURL = "https://image.tmdb.org/t/p/w500"
     HorizontalMultiBrowseCarousel(
         state = rememberCarouselState { movies.count() },
         modifier = Modifier
             .fillMaxWidth()
-            .height(height + 100.dp),
+            .height(height + 100.dp), // Extra padding for title and ratings
         preferredItemWidth = width,
         itemSpacing = 5.dp,
-        contentPadding = PaddingValues(horizontal = 0.dp)
     ) { i ->
         Column {
             val movie = movies[i]
@@ -55,13 +56,12 @@ fun MovieListCarousel(
                     onCardClick(movie.id)
                 },
             ) {
-
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w154" + movie.posterPath,
-                        contentDescription = "Image from URL",
+                        model = posterURL + movie.posterPath,
+                        contentDescription = stringResource(R.string.movie_poster),
                         contentScale = ContentScale.FillHeight,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -73,7 +73,7 @@ fun MovieListCarousel(
             Row {
                 Icon(
                     imageVector = Icons.Filled.Star,
-                    contentDescription = "Rating: "
+                    contentDescription = stringResource(R.string.rating)
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(movie.voteAverage.toString())
