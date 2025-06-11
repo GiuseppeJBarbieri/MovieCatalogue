@@ -96,7 +96,7 @@ fun ParentScaffold(
                 MainPaneContent(
                     onCardClick = { selectedMovieId ->
                         movieId = selectedMovieId
-
+                        fetchMovieDetails(movieId)
                         scope.launch {
                             scaffoldNavigator.navigateTo(SupportingPaneScaffoldRole.Supporting)
                         }
@@ -131,7 +131,6 @@ fun ParentScaffold(
                         }
                     }
             ) {
-                fetchMovieDetails(movieId)
                 if (isLoading) {
                     Box(
                         modifier = Modifier.fillMaxSize(),

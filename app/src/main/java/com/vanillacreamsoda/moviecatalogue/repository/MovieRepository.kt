@@ -143,7 +143,6 @@ class MovieRepository @Inject constructor(
         return if (json == null) {
             emptyList()
         } else {
-            Log.d("Giuseppe", "Add Favorite: $json")
             val type = object : TypeToken<List<Long>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         }
@@ -156,7 +155,6 @@ class MovieRepository @Inject constructor(
         val json = gson.toJson(ids)
         sharedPreferences.edit { putString(keyFavoriteIds, json) }
         _favoriteMovieIdsFlow.value = ids // Update the Flow
-        Log.d("Giuseppe", "Saved favorite movie IDs: $ids")
     }
 
     /**
@@ -167,8 +165,6 @@ class MovieRepository @Inject constructor(
         if (movieId !in currentFavorites) {
             currentFavorites.add(movieId)
             saveFavoriteMovieIdsToPrefs(currentFavorites)
-            Log.d("Giuseppe", "Add Favorite: $currentFavorites")
-            Log.d("Giuseppe", "Add Favorite: $movieId")
         }
     }
 
